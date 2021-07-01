@@ -21,9 +21,7 @@ const actions = {
 }
 
 const getters = {
-  squared(state) {
-    return Math.pow(state.counter, 2)
-  }
+
 }
 
 
