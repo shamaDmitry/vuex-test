@@ -1,27 +1,39 @@
+import { API_URL } from '@/api/consts'
+
 const state = {
-  currencyName: 'USD'
+  todayPrice: null,
+  currencyCodeName: 'USD'
 }
 
 const mutations = {
-  setCurrentAmount(state, newMoneyValue) {
-    state.currentAmount = newMoneyValue
+  setTodayPrice(state, payload) {
+    payload.map(item => {
+      return (
+        state.todayPrice = item.rate,
+        state.currencyCodeName = item.cc
+      )
+    });
   }
 }
 
 const actions = {
-  getCurrents({ commit }) {
+  async getTodayPrice({ commit }, code) {
     let date = new Date().toISOString().replaceAll('-', '').slice(0, 8);
+    let url = `${API_URL}/exchange?valcode=${code}&date=${date}&json`;
+    const res = await fetch(url);
+    const data = await res.json();
 
-    fetch(`${API_URL}/exchange?valcode=USD&date=${date}&json`)
-      .then(res => res.json())
-      .then(res => {
-        console.log('res', res);
-      })
+    commit('setTodayPrice', data);
   }
 }
 
 const getters = {
-
+  todayPrice(state) {
+    return state.todayPrice * 100;
+  },
+  currencyCodeName(state) {
+    return state.currencyCodeName;
+  }
 }
 
 

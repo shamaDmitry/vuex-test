@@ -20,12 +20,13 @@
 								{{ today }}
 							</div>
 							<v-list-item-title class="headline mb-1">
-								100 hrn = 2700 USD
+								100 hrn = {{ todayPrice }} {{ currencyCodeName }}
 							</v-list-item-title>
 						</v-list-item-content>
 
 						<v-select
 							:items="currencyCode"
+							change="test"
 							dense
 							hide-details
 							label="Currency"
@@ -41,7 +42,7 @@
 				sm="6"
 			>
 				<h2 class="mb-2">
-					Difference prev day
+					Difference price prev day
 				</h2>
 
 				<v-card outlined>
@@ -63,19 +64,6 @@
 									<v-icon right>mdi-arrow-up</v-icon>
 								</v-chip>
 							</v-list-item-title>
-
-							<v-list-item-title class="headline mb-1">
-								23.0 hrn
-
-								<v-chip
-									class=""
-									color="red"
-									text-color="white"
-								>
-									1,0%
-									<v-icon right>mdi-arrow-down</v-icon>
-								</v-chip>
-							</v-list-item-title>
 						</v-list-item-content>
 					</v-list-item>
 				</v-card>
@@ -88,7 +76,6 @@
   import { mapState, mapGetters, mapActions } from 'vuex'
   import moment from 'moment'
 
-
   export default {
     data() {
       return {
@@ -96,14 +83,13 @@
 			}
 		},
     name: 'Home',
-    components: {},
+		mounted() {
+      this.getTodayPrice('USD');
+		},
     computed: {
-      ...mapState('counter', {
-        counter: state => state.counter,
-      }),
-
-      ...mapGetters('counter', {
-        squared: 'squared'
+      ...mapGetters('currency', {
+        todayPrice: 'todayPrice',
+        currencyCodeName: 'currencyCodeName'
       }),
 
 			today() {
@@ -115,14 +101,13 @@
     },
 
     methods: {
-      ...mapActions('counter', [
-        'increaseAction',
-        'decreaseAction'
-      ])
+      ...mapActions('currency', [
+        'getTodayPrice',
+      ]),
+
+      test(e) {
+        console.log('e', e);
+      }
     },
   }
 </script>
-
-<style scoped>
-	$card-actions-padding: 22px;
-</style>

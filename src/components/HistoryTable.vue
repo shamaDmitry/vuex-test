@@ -1,5 +1,6 @@
 <template>
-	<div>
+	<v-row>
+		<v-col>
 			<v-select
 				class="mb-6"
 				:items="currencyCode"
@@ -10,27 +11,39 @@
 				style="max-width: 250px;"
 			></v-select>
 
-		<v-simple-table>
-			<template v-slot:default>
-				<thead>
-				<tr>
-					<th class="text-left">Date</th>
-					<th class="text-left">Value</th>
-				</tr>
-				</thead>
-				<tbody>
-				<tr v-for="item in desserts" :key="item.id">
-					<td>{{ item.name }}</td>
-					<td>{{ item.calories }}</td>
-				</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
-	</div>
+			<v-simple-table>
+				<template v-slot:default>
+					<thead>
+					<tr>
+						<th class="text-left">Date</th>
+						<th class="text-left">Value</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr v-for="item in desserts" :key="item.id">
+						<td>{{ item.name }}</td>
+						<td>{{ item.calories }}</td>
+					</tr>
+					</tbody>
+				</template>
+			</v-simple-table>
+		</v-col>
+
+		<v-col>
+			<div>
+				<currency-chart></currency-chart>
+			</div>
+		</v-col>
+	</v-row>
 </template>
 
 <script>
+  import CurrencyChart from '@/components/CurrencyChart'
+
   export default {
+    components: {
+      CurrencyChart
+    },
     data() {
       return {
         currencyCode: ['USD', 'EUR'],
