@@ -1,6 +1,7 @@
 import { API_URL } from '@/api/consts'
 
 const state = {
+  currencyCodes: ['USD', 'EUR'],
   todayPrice: null,
   currencyCodeName: 'USD'
 }
@@ -8,11 +9,12 @@ const state = {
 const mutations = {
   setTodayPrice(state, payload) {
     payload.map(item => {
-      return (
-        state.todayPrice = item.rate,
-        state.currencyCodeName = item.cc
-      )
+      state.todayPrice = item.rate,
+      state.currencyCodeName = item.cc
     });
+  },
+  setCurrencyCode(state, code) {
+    state.currencyCodeName = code
   }
 }
 

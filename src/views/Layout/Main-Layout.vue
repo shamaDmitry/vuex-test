@@ -12,7 +12,7 @@
 					</v-list-item-action>
 					<v-list-item-content>
 						<v-list-item-title>
-							Dashboard
+							Home
 						</v-list-item-title>
 					</v-list-item-content>
 				</v-list-item>
@@ -51,16 +51,16 @@
 			</v-container>
 		</v-main>
 
-		<appFooter></appFooter>
+		<AppFooter />
 	</v-app>
 </template>
 
 <script>
-  import appFooter from '@/components/Core/Footer'
+  import AppFooter from '@/components/core/Footer'
 
   export default {
     components: {
-      appFooter
+      AppFooter
     },
     name: 'Main-Layout',
     data: () => ({

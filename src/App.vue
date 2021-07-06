@@ -1,13 +1,13 @@
 <template>
-	<main-layout></main-layout>
+	<MainLayout />
 </template>
 
 <script>
-import mainLayout from '@/views/Layout/Main-Layout'
+import MainLayout from '@/views/Layout/Main-Layout'
 
 export default {
   components: {
-    mainLayout
+    MainLayout
 	},
   name: 'App',
   data: () => ({

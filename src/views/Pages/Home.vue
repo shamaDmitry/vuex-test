@@ -25,10 +25,12 @@
 						</v-list-item-content>
 
 						<v-select
-							:items="currencyCode"
-							change="test"
+							:items="currencyCodes"
+							v-model="currencyCodeName"
+							v-on:change="setCurrencyCode"
 							dense
 							hide-details
+							return-object
 							label="Currency"
 							filled
 							style="max-width: 250px;"
@@ -77,25 +79,36 @@
   import moment from 'moment'
 
   export default {
-    data() {
-      return {
-        currencyCode: ['USD', 'EUR'],
-			}
-		},
     name: 'Home',
-		mounted() {
-      this.getTodayPrice('USD');
-		},
+    mounted() {
+      this.getTodayPrice(this.currencyCodeName);
+    },
     computed: {
+      ...mapState('currency', {
+        currencyCodes: 'currencyCodes',
+        currencyCodeName: 'currencyCodeName'
+      }),
+
       ...mapGetters('currency', {
         todayPrice: 'todayPrice',
         currencyCodeName: 'currencyCodeName'
       }),
 
-			today() {
+      currencyCodeName: {
+        get() {
+          return this.$store.state.currencyCodeName
+        },
+        set(val) {
+          console.log('val', val);
+
+			    this.$store.commit('currency/setCurrencyCode', val)
+        }
+      },
+
+      today() {
         return moment().format('LL');
-			},
-			prevDate() {
+      },
+      prevDate() {
         return moment().subtract(1, 'days').format('LL');
       }
     },
@@ -105,8 +118,8 @@
         'getTodayPrice',
       ]),
 
-      test(e) {
-        console.log('e', e);
+      setCurrencyCode(e) {
+        this.getTodayPrice(e);
       }
     },
   }
