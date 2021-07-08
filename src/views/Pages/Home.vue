@@ -20,14 +20,19 @@
 								{{ today }}
 							</div>
 							<v-list-item-title class="headline mb-1">
-								100 hrn = {{ todayPrice }} {{ currencyCodeName }}
+								<div>
+									1 {{ currencyCodeName }} = {{ todayPrice }} hrn
+								</div>
+								<div>
+									100 {{ currencyCodeName }} = {{ todayPriceDisplay }} hrn
+								</div>
 							</v-list-item-title>
 						</v-list-item-content>
 
 						<v-select
 							:items="currencyCodes"
 							v-model="currencyCodeName"
-							v-on:change="setCurrencyCode"
+							v-on:change="onChangeCurrencyCode"
 							dense
 							hide-details
 							return-object
@@ -44,7 +49,7 @@
 				sm="6"
 			>
 				<h2 class="mb-2">
-					Difference price prev day
+					Difference price prev day 1 {{ currencyCodeName }}
 				</h2>
 
 				<v-card outlined>
@@ -55,14 +60,16 @@
 							</div>
 
 							<v-list-item-title class="headline mb-1">
-								28.0 hrn
+								1 {{ currencyCodeName }} = {{ prevDayPrice }} hrn
 
 								<v-chip
 									class=""
 									color="green"
 									text-color="white"
 								>
-									1,0%
+									<div>
+										{{ percentView }} %
+									</div>
 									<v-icon right>mdi-arrow-up</v-icon>
 								</v-chip>
 							</v-list-item-title>
@@ -77,30 +84,33 @@
 <script>
   import { mapState, mapGetters, mapActions } from 'vuex'
   import moment from 'moment'
+  import formatDate from '@/utils/helpers'
 
   export default {
     name: 'Home',
-    mounted() {
-      this.getTodayPrice(this.currencyCodeName);
+    created() {
+			this.onChangeCurrencyCode('USD')
     },
     computed: {
       ...mapState('currency', {
         currencyCodes: 'currencyCodes',
-        currencyCodeName: 'currencyCodeName'
+        prevDayPrice: 'prevDayPrice'
       }),
 
-      ...mapGetters('currency', {
+			...mapGetters('currency', {
         todayPrice: 'todayPrice',
-        currencyCodeName: 'currencyCodeName'
-      }),
+        prevDay: 'prevDay'
+			}),
+
+      todayPriceDisplay() {
+        return +(this.todayPrice * 100).toFixed(4);
+			},
 
       currencyCodeName: {
         get() {
-          return this.$store.state.currencyCodeName
+          return this.$store.state.currency.currencyCodeName
         },
         set(val) {
-          console.log('val', val);
-
 			    this.$store.commit('currency/setCurrencyCode', val)
         }
       },
@@ -108,19 +118,24 @@
       today() {
         return moment().format('LL');
       },
-      prevDate() {
+
+			prevDate() {
         return moment().subtract(1, 'days').format('LL');
-      }
+      },
+
+      percentView() {
+        return ((this.prevDayPrice - this.todayPrice) / this.todayPrice * 100).toFixed(4);
+			}
     },
 
     methods: {
-      ...mapActions('currency', [
-        'getTodayPrice',
-      ]),
+			...mapActions('currency', {
+        getPrice: 'getPrice'
+			}),
 
-      setCurrencyCode(e) {
-        this.getTodayPrice(e);
-      }
+      onChangeCurrencyCode(code) {
+        this.$store.dispatch('currency/getPrice', code)
+      },
     },
   }
 </script>

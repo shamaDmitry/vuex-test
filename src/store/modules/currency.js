@@ -1,40 +1,71 @@
 import { API_URL } from '@/api/consts'
+import moment from 'moment'
+import formatDate from '@/utils/helpers'
 
 const state = {
   currencyCodes: ['USD', 'EUR'],
   todayPrice: null,
-  currencyCodeName: 'USD'
+  prevDayPrice: null,
+  currencyCodeName: 'USD',
 }
 
 const mutations = {
-  setTodayPrice(state, payload) {
-    payload.map(item => {
+  setTodayPrice(state, priceObj) {
+    console.log('priceObj', priceObj);
+
+    priceObj.map(item => {
       state.todayPrice = item.rate,
       state.currencyCodeName = item.cc
     });
   },
+
+  setPrevDayPrice(state, price) {
+    price.map(item => {
+      state.prevDayPrice = item.rate
+    });
+  },
+
   setCurrencyCode(state, code) {
     state.currencyCodeName = code
-  }
+  },
 }
 
 const actions = {
-  async getTodayPrice({ commit }, code) {
-    let date = new Date().toISOString().replaceAll('-', '').slice(0, 8);
-    let url = `${API_URL}/exchange?valcode=${code}&date=${date}&json`;
-    const res = await fetch(url);
-    const data = await res.json();
+  getPrice({ commit, getters }, code) {
+    let todayDate = formatDate(new Date().toISOString());
+    let currentUrl = `${API_URL}/exchange?valcode=${code}&date=${todayDate}&json`;
 
-    commit('setTodayPrice', data);
+    fetch(currentUrl)
+      .then(res => res.json())
+      .then(res => {
+        commit('setTodayPrice', res);
+      });
+
+    let prevUrl = `${API_URL}/exchange?valcode=${code}&date=${getters.prevDay}&json`;
+
+    fetch(prevUrl)
+      .then(res => res.json())
+      .then(res => {
+        commit('setPrevDayPrice', res);
+      });
   }
 }
 
 const getters = {
   todayPrice(state) {
-    return state.todayPrice * 100;
+    return state.todayPrice;
   },
+
   currencyCodeName(state) {
     return state.currencyCodeName;
+  },
+
+  prevDay() {
+    return formatDate(moment().subtract(1, 'days').format())
+  },
+
+  prevDayPrice(state) {
+    return state.prevDayPrice
   }
 }
 
