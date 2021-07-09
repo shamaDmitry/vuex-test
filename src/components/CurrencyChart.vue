@@ -1,23 +1,20 @@
 <script>
   import { Line } from 'vue-chartjs'
+  import { mapState } from 'vuex'
 
   export default {
+    name: 'chart',
     extends: Line,
-		data() {
+    data() {
       return {
         chartdata: {
-          labels: ['2021-07-01', '2021-07-01', '2021-07-01','2021-07-01','2021-07-01', '2021-07-01','2021-07-01'],
+          labels: this.chartLabels,
           datasets: [
             {
               label: 'USD',
               borderColor: '#ff6384',
               data: [3, 5, 4, 9, 12, 22, 3]
             },
-            {
-              label: 'EUR',
-              borderColor: '#36a2eb',
-              data: [2, 4, 5, 4, 6, 8, 9]
-            }
           ]
         },
         options: {
@@ -28,10 +25,26 @@
           },
           maintainAspectRatio: false,
         }
-			}
+      }
+    },
+		computed: {
+      ...mapState('currency', {
+        historyData: 'historyData'
+			}),
+
+			chartLabels() {
+        return this.historyData.map(data => data.rate)
+			},
+
+			chartValues() {
+        return this.historyData.map(data => data.exchangedate)
+      }
 		},
-    mounted () {
-      this.renderChart(this.chartdata, this.options)
+    mounted() {
+      this.renderChart({
+        labels: this.chartLabels,
+        datasets: this.chartValues
+			}, this.options)
     }
-	}
+  }
 </script>

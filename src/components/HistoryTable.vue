@@ -1,80 +1,70 @@
 <template>
-	<v-row>
-		<v-col>
-			<v-select
-				class="mb-6"
-				:items="currencyCode"
-				dense
-				hide-details
-				label="Currency"
-				filled
-				style="max-width: 250px;"
-			></v-select>
+	<div>
+		<v-select
+			class="mb-6"
+			:items="currencyCodes"
+			v-model="currencyCodeName"
+			v-on:change="onChangeCurrencyCode"
+			dense
+			hide-details
+			label="Currency"
+			filled
+			style="max-width: 250px;"
+		></v-select>
 
-			<v-simple-table>
-				<template v-slot:default>
-					<thead>
-					<tr>
-						<th class="text-left">Date</th>
-						<th class="text-left">Value</th>
-					</tr>
-					</thead>
-					<tbody>
-					<tr v-for="item in desserts" :key="item.id">
-						<td>{{ item.name }}</td>
-						<td>{{ item.calories }}</td>
-					</tr>
-					</tbody>
-				</template>
-			</v-simple-table>
-		</v-col>
-
-		<v-col>
-			<div>
-				<currency-chart></currency-chart>
-			</div>
-		</v-col>
-	</v-row>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+				<tr>
+					<th class="text-left">Date</th>
+					<th class="text-left">Value</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr v-for="(item, index) in historyData" :key="index">
+					<td>{{ item.exchangedate }}</td>
+					<td>{{ item.rate }} hrn</td>
+				</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+	</div>
 </template>
 
 <script>
-  import CurrencyChart from '@/components/CurrencyChart'
+  import { mapActions, mapState } from 'vuex'
 
   export default {
-    components: {
-      CurrencyChart
+    beforeMount() {
+      this.getCurrencyList();
+      this.onChangeCurrencyCode('USD');
     },
-    data() {
-      return {
-        currencyCode: ['USD', 'EUR'],
-        desserts: [
-          {
-            id: 1,
-            name: "2021-07-01T12:47:09.702Z",
-            calories: 159,
-          },
-          {
-            id: 2,
-            name: "2021-07-01T12:47:09.702Z",
-            calories: 237,
-          },
-          {
-            id: 3,
-            name: "2021-07-01T12:47:09.702Z",
-            calories: 262,
-          },
-          {
-            id: 4,
-            name: "2021-07-01T12:47:09.702Z",
-            calories: 305,
-          },
-          {
-            id: 5,
-            name: "2021-07-01T12:47:09.702Z",
-            calories: 356,
-          },
-        ],
-      }
+    computed: {
+      ...mapState('currency', {
+        currencyCodes: 'currencyCodes',
+        historyData: 'historyData'
+      }),
+
+      currencyCodeName: {
+        get() {
+          return this.$store.state.currency.currencyCodeName
+        },
+        set(val) {
+          this.$store.commit('currency/setCurrencyCode', val)
+        }
+      },
+
     },
+    methods: {
+      ...mapActions('currency', {
+        getCurrencyList: 'getCurrencyList'
+      }),
+
+      onChangeCurrencyCode(code) {
+        console.log('code', code);
+
+        this.$store.dispatch('currency/getHistoryData', code)
+			}
+    }
   }
 </script>

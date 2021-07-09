@@ -3,19 +3,20 @@ import moment from 'moment'
 import formatDate from '@/utils/helpers'
 
 const state = {
-  currencyCodes: ['USD', 'EUR'],
+  currencyCodes: [],
   todayPrice: null,
   prevDayPrice: null,
   currencyCodeName: 'USD',
+  currencyText: '',
+  historyData: []
 }
 
 const mutations = {
   setTodayPrice(state, priceObj) {
-    console.log('priceObj', priceObj);
-
     priceObj.map(item => {
       state.todayPrice = item.rate,
-      state.currencyCodeName = item.cc
+        state.currencyCodeName = item.cc,
+        state.currencyText = item.txt
     });
   },
 
@@ -28,6 +29,18 @@ const mutations = {
   setCurrencyCode(state, code) {
     state.currencyCodeName = code
   },
+
+  setCurrencyCodeNames(state, codes) {
+    state.currencyCodes = codes
+  },
+
+  setHistoryData(state, dates) {
+    state.historyData = dates
+  },
+
+  setCurrencyText(state, text) {
+    state.currencyText = text
+  }
 }
 
 const actions = {
@@ -48,7 +61,46 @@ const actions = {
       .then(res => {
         commit('setPrevDayPrice', res);
       });
-  }
+  },
+
+  getCurrencyList({ commit }) {
+    let url = `${API_URL}/exchange?json`;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(res => {
+        let codes = res.map(item => item.cc).sort();
+
+        commit('setCurrencyCodeNames', codes);
+      });
+  },
+
+  async getHistoryData({ commit }, code) {
+    let promises = [];
+    let rawData = [];
+    let currencyText;
+
+    for(let i = 1; i <= 7; i++) {
+      let date = formatDate(moment().subtract(i, 'days').format());
+
+      promises.push(
+        fetch(`${API_URL}/exchange?valcode=${code}&date=${date}&json`)
+      );
+    }
+
+    await Promise.all(promises)
+      .then(responses => Promise.all(responses.map(r => r.json())))
+      .then(res => {
+        res.map((oneRes) => {
+          rawData.push(oneRes[0]);
+          currencyText = oneRes[0].txt
+        });
+      })
+      .catch(error => console.log("Error" + error));
+
+    commit('setHistoryData', rawData);
+    commit('setCurrencyText', currencyText);
+  },
 }
 
 const getters = {
