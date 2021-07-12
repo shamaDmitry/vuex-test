@@ -33,6 +33,7 @@
 								{{ today }}
 							</div>
 							<v-list-item-title class="headline mb-1">
+								1 {{ currencyCodeName }} = {{ todayPrice }} hrn <br>
 								100 {{ currencyCodeName }} = {{ todayPriceDisplay }} hrn
 
 								<template v-if="percentView !== 0">
@@ -51,9 +52,7 @@
 								</template>
 
 								<template v-else>
-									<v-chip
-										text-color="white"
-									>
+									<v-chip text-color="white">
 										0
 									</v-chip>
 								</template>
@@ -92,11 +91,10 @@
 <script>
   import { mapState, mapGetters, mapActions } from 'vuex'
   import moment from 'moment'
-  import formatDate from '@/utils/helpers'
 
   export default {
     name: 'Home',
-    beforeMount() {
+    mounted() {
       this.onChangeCurrencyCode('USD');
       this.getCurrencyList();
     },
@@ -137,8 +135,6 @@
         // ((today - prevDay) * 100%) / prevDay
 
         let percent = ((this.todayPrice - this.prevDayPrice) * 100) / this.prevDayPrice;
-
-        console.log('percent', percent);
 
         return percent;
       },

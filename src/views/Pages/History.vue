@@ -15,7 +15,7 @@
 
 			<v-col>
 				<div>
-					<currency-chart />
+					<currency-chart :chartData="chartDataRaw" :options="chartOptions" />
 				</div>
 			</v-col>
 		</v-row>
@@ -26,17 +26,43 @@
   import HistoryTable from '@/components/HistoryTable'
   import CurrencyChart from '@/components/CurrencyChart'
 
-  import { mapState } from 'vuex'
+  import { mapState, mapGetters } from 'vuex'
 
   export default {
     components: {
       HistoryTable,
       CurrencyChart
     },
+
     computed: {
       ...mapState('currency', {
-        currencyText: 'currencyText'
-      })
+        currencyText: 'currencyText',
+        currencyCodeName: 'currencyCodeName',
+        historyData: 'historyData'
+      }),
+
+      ...mapGetters('currency', {
+        chartLabels: 'chartLabels',
+        chartValues: 'chartValues'
+      }),
+
+      chartOptions() {
+        return {
+          responsive: true,
+          interaction: {
+            mode: 'index',
+            intersect: false,
+          },
+          maintainAspectRatio: false,
+        }
+      },
+
+      chartDataRaw() {
+        return {
+          labels: this.chartLabels,
+          datasets:[this.chartValues]
+        }
+      }
     }
   }
 </script>

@@ -35,7 +35,7 @@
   import { mapActions, mapState } from 'vuex'
 
   export default {
-    beforeMount() {
+    mounted() {
       this.getCurrencyList();
       this.onChangeCurrencyCode('USD');
     },

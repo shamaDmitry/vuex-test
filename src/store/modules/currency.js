@@ -118,7 +118,28 @@ const getters = {
 
   prevDayPrice(state) {
     return state.prevDayPrice
-  }
+  },
+
+  chartLabels(state) {
+    return state.historyData.map(data => data.exchangedate)
+  },
+
+  chartValues(state) {
+    let label = '';
+    let data = state.historyData.map(item => {
+      return (
+        label = item.txt,
+        item.rate
+      )
+    });
+
+    return {
+      label,
+      data,
+      borderColor: '#de4437',
+      borderWidth: 4
+    }
+  },
 }
 
 
