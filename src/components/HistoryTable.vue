@@ -8,6 +8,7 @@
 			dense
 			hide-details
 			label="Currency"
+			menu-props="auto"
 			filled
 			style="max-width: 250px;"
 		></v-select>
@@ -37,7 +38,7 @@
   export default {
     mounted() {
       this.getCurrencyList();
-      this.onChangeCurrencyCode('USD');
+      this.onChangeCurrencyCode(this.currencyCodeName);
     },
     computed: {
       ...mapState('currency', {

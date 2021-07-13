@@ -13,7 +13,9 @@
 			hide-details
 			return-object
 			label="Currency"
+			menu-props="auto"
 			filled
+			single-line
 			style="max-width: 250px;"
 		></v-select>
 
@@ -95,7 +97,7 @@
   export default {
     name: 'Home',
     mounted() {
-      this.onChangeCurrencyCode('USD');
+      this.onChangeCurrencyCode(this.currencyCodeName);
       this.getCurrencyList();
     },
     computed: {
@@ -136,7 +138,7 @@
 
         let percent = ((this.todayPrice - this.prevDayPrice) * 100) / this.prevDayPrice;
 
-        return percent;
+        return Number(percent.toFixed(4));
       },
 
       isNegative() {
