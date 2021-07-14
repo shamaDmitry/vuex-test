@@ -1,9 +1,9 @@
 <template>
 	<v-app>
 		<v-navigation-drawer
-				v-model="drawer"
-				app
-				clipped
+			v-model="drawer"
+			app
+			clipped
 		>
 			<v-list dense>
 				<v-list-item link to="/">

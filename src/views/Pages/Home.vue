@@ -92,7 +92,6 @@
 
 <script>
   import { mapState, mapGetters, mapActions } from 'vuex'
-  import moment from 'moment'
 
   export default {
     name: 'Home',
@@ -126,11 +125,11 @@
       },
 
       today() {
-        return moment().format('LL');
+        return this.$moment().format('LL');
       },
 
       prevDate() {
-        return moment().subtract(1, 'days').format('LL');
+        return this.$moment().subtract(1, 'days').format('LL');
       },
 
       percentView() {

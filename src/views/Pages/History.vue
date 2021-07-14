@@ -10,13 +10,25 @@
 
 		<v-row>
 			<v-col>
-				<history-table />
+				<HistoryTable />
 			</v-col>
 
 			<v-col>
 				<div>
-					<currency-chart :chartData="chartDataRaw" :options="chartOptions" />
+					<CurrencyChart
+						:chartData="chartDataRaw"
+						:options="chartOptions" />
 				</div>
+			</v-col>
+		</v-row>
+
+		<v-row>
+			<v-col>
+				<h2 class="mb-4">
+					History exchange rate $ to UAH, EUR
+				</h2>
+
+				<DiffChartContainer />
 			</v-col>
 		</v-row>
 	</div>
@@ -25,13 +37,15 @@
 <script>
   import HistoryTable from '@/components/HistoryTable'
   import CurrencyChart from '@/components/CurrencyChart'
+  import DiffChartContainer from '@/components/DiffChart/DiffChartContainer'
 
   import { mapState, mapGetters } from 'vuex'
 
   export default {
     components: {
       HistoryTable,
-      CurrencyChart
+      CurrencyChart,
+      DiffChartContainer
     },
 
     computed: {
@@ -60,7 +74,7 @@
       chartDataRaw() {
         return {
           labels: this.chartLabels,
-          datasets:[this.chartValues]
+          datasets: [this.chartValues]
         }
       }
     }

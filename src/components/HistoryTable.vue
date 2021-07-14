@@ -62,8 +62,6 @@
       }),
 
       onChangeCurrencyCode(code) {
-        console.log('code', code);
-
         this.$store.dispatch('currency/getHistoryData', code)
 			}
     }
