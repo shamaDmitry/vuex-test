@@ -69,27 +69,30 @@
             let EURdata = [];
 
             res.map((oneRes) => {
-              UAHdataRaw = {
-                type: "line",
-                borderWidth: 2,
-                label: 'UAH',
-                backgroundColor: "rgba(54,73,93,.5)",
-                borderColor: "#47b784"
-              };
-              UAHdata.push(oneRes.rates['UAH']);
-
-              EURdataRaw = {
-                type: "line",
-                borderWidth: 2,
-                label: 'EUR',
-                borderColor: "#033191",
-                backgroundColor: "rgba(54,73,93,.5)",
-              };
+							UAHdata.push(oneRes.rates['UAH']);
               EURdata.push(oneRes.rates['EUR']);
             });
 
-            UAHdataRaw.data = UAHdata;
-            EURdataRaw.data = EURdata;
+						let baseConfig = {
+              type: "line",
+              borderWidth: 2,
+						};
+
+            UAHdataRaw = {
+							...baseConfig,
+							label: 'UAH',
+              data: UAHdata,
+              borderColor: "#47b784",
+              backgroundColor: "rgba(54,73,93,.5)"
+            };
+
+            EURdataRaw = {
+							...baseConfig,
+							label: 'EUR',
+							data: EURdata,
+              borderColor: "#033191",
+              backgroundColor: "rgba(54,73,93,.5)"
+						};
 
             this.chartDataRaw.datasets.push(
               UAHdataRaw,
