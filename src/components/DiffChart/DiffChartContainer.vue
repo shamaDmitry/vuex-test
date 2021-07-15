@@ -36,7 +36,7 @@
     },
 
     mounted() {
-    	this.getAllHistoryData()
+    	// this.getAllHistoryData()
     },
 
     methods: {
@@ -44,6 +44,8 @@
         this.loaded = false;
         this.isLoading = true;
         this.chartDataRaw.datasets = [];
+        const currencies = ['UAH', 'EUR'];
+        const currenciesString = currencies.join(',');
 
         let startDate = 2001;
         let endDate = Number(new Date().getFullYear());
@@ -54,14 +56,46 @@
           labels.push(`${year}-01-01`);
 
           promises.push(
-            fetch(`${API_EXTERNAL}/historical/${year}-01-01.json?app_id=${APP_ID}&symbols=UAH,EUR`)
+            fetch(`${API_EXTERNAL}/historical/${year}-01-01.json?app_id=${APP_ID}&symbols=${currenciesString}`)
           );
         }
+
+        this.chartDataRaw.labels = labels;
+
+        const rawResponse = await Promise.all(promises);
+        const responses = await Promise.all(rawResponse.map(r => r.json()));
+				console.log('responses', responses);
+
+				// for
+
+        UAHdataRaw = {
+          type: "line",
+          borderWidth: 2,
+          label: 'UAH',
+          data: UAHdata,
+          borderColor: "#47b784",
+          backgroundColor: "rgba(54,73,93,.5)"
+        };
+
+        EURdataRaw = {
+          type: "line",
+          borderWidth: 2,
+          label: 'EUR',
+          data: EURdata,
+          borderColor: "#033191",
+          backgroundColor: "rgba(54,73,93,.5)"
+        };
+
+        this.chartDataRaw.datasets.push(
+          UAHdataRaw,
+          EURdataRaw
+        );
+
 
         await Promise.all(promises)
           .then(responses => Promise.all(responses.map(r => r.json())))
           .then(res => {
-            this.chartDataRaw.labels = labels;
+
 
             let UAHdataRaw;
             let UAHdata = [];
