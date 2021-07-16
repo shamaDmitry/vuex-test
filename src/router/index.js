@@ -18,6 +18,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Pages/History.vue')
   },
   {
+    path: '/dynamic-history',
+    name: 'DynamicHistory',
+    component: () => import('../views/Pages/DynamicHistory.vue')
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('../views/Pages/Login.vue')

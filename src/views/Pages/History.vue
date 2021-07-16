@@ -21,19 +21,12 @@
 				</div>
 			</v-col>
 		</v-row>
-
-		<v-row>
-			<v-col>
-				<DiffChartContainer />
-			</v-col>
-		</v-row>
 	</div>
 </template>
 
 <script>
   import HistoryTable from '@/components/HistoryTable'
   import CurrencyChart from '@/components/CurrencyChart'
-  import DiffChartContainer from '@/components/DiffChart/DiffChartContainer'
 
   import { mapState, mapGetters } from 'vuex'
 
@@ -41,14 +34,12 @@
     components: {
       HistoryTable,
       CurrencyChart,
-      DiffChartContainer
     },
 
     computed: {
       ...mapState('currency', {
         currencyText: 'currencyText',
         currencyCodeName: 'currencyCodeName',
-        historyData: 'historyData'
       }),
 
       ...mapGetters('currency', {

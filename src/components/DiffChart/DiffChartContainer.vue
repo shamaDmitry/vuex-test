@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<h2 class="mb-4">
+		<h1 class="mb-4">
 			History exchange rate $ to {{ currenciesDisplay }}
-		</h2>
+		</h1>
 
 		<validation-observer
 			ref="observer"
@@ -132,13 +132,6 @@
     },
     data() {
       return {
-        currencies: [
-          {
-            code: '',
-            color: '',
-            background: 'rgba(54,73,93,.5)'
-          },
-        ],
         loaded: false,
         isLoading: false,
         chartDataRaw: {
@@ -153,21 +146,22 @@
     },
 
     methods: {
-      removeField: function(index) {
-        this.currencies.splice(index, 1);
-      },
-
-      addField: function() {
-        this.currencies.push({
-          code: '',
-          color: '',
-          background: 'rgba(54,73,93,.5)'
-        });
-      },
-
       ...mapActions('currency', {
         getCurrencyList: 'getCurrencyList'
       }),
+
+      removeField: function(index) {
+        this.$store.commit('currency/removeCurrencies', index);
+      },
+
+      addField: function() {
+        this.$store.commit('currency/setCurrencies',
+          {
+            code: '',
+            color: '',
+            background: 'rgba(54,73,93,.5)'
+          });
+      },
 
       getCurrencyData(entryData, currencyName) {
         return entryData.map(function(item) {
@@ -220,7 +214,8 @@
     },
     computed: {
       ...mapState('currency', {
-        currencyCodes: 'currencyCodes'
+        currencyCodes: 'currencyCodes',
+        currencies: 'currencies'
       }),
 
       currenciesDisplay() {

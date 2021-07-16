@@ -8,7 +8,14 @@ const state = {
   prevDayPrice: null,
   currencyCodeName: 'USD',
   currencyText: '',
-  historyData: []
+  historyData: [],
+  currencies: [
+    {
+      code: '',
+      color: '',
+      background: 'rgba(54,73,93,.5)'
+    },
+  ],
 }
 
 const mutations = {
@@ -42,6 +49,13 @@ const mutations = {
 
   setCurrencyText(state, text) {
     state.currencyText = text
+  },
+
+  setCurrencies(state, payload) {
+    state.currencies.push(payload);
+  },
+  removeCurrencies(state, index) {
+    state.currencies.splice(index, 1);
   }
 }
 
