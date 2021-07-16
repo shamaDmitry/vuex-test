@@ -24,10 +24,6 @@
 
 		<v-row>
 			<v-col>
-				<h2 class="mb-4">
-					History exchange rate $ to UAH, EUR
-				</h2>
-
 				<DiffChartContainer />
 			</v-col>
 		</v-row>

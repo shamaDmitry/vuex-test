@@ -27,6 +27,8 @@ const mutations = {
   },
 
   setCurrencyCode(state, code) {
+    console.log('setCurrencyCode');
+
     state.currencyCodeName = code
   },
 
@@ -69,7 +71,7 @@ const actions = {
     fetch(url)
       .then(res => res.json())
       .then(res => {
-        let codes = res.map(item => item.cc).sort();
+        let codes = res.filter(item => item.cc !== 'USD').map(item => item.cc).sort();
 
         commit('setCurrencyCodeNames', codes);
       });

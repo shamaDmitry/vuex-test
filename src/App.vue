@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import MainLayout from '@/views/Layout/Main-Layout'
+import MainLayout from '@/views/Layout/MainLayout'
 import EmptyLayout from '@/views/Layout/EmptyLayout'
 
 export default {
