@@ -16,6 +16,7 @@ const state = {
       background: 'rgba(54,73,93,.5)'
     },
   ],
+  chartDataRaw: null
 }
 
 const mutations = {
@@ -34,8 +35,6 @@ const mutations = {
   },
 
   setCurrencyCode(state, code) {
-    console.log('setCurrencyCode');
-
     state.currencyCodeName = code
   },
 
@@ -54,8 +53,13 @@ const mutations = {
   setCurrencies(state, payload) {
     state.currencies.push(payload);
   },
+
   removeCurrencies(state, index) {
     state.currencies.splice(index, 1);
+  },
+
+  setDymamicChartData(state, chartDataObj) {
+    state.chartDataRaw = chartDataObj
   }
 }
 

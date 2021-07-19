@@ -23,6 +23,9 @@
       }
     },
     mounted() {
+      console.log('chartData', this.chartData);
+      console.log('options', this.options);
+
       this.renderChart(this.chartData, this.options)
     }
   }

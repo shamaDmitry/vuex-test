@@ -103,7 +103,7 @@
 		</validation-observer>
 
 		<DiffChart
-			v-if="loaded"
+			v-if="chartDataRaw"
 			:chartData="chartDataRaw"
 		/>
 	</div>
@@ -132,12 +132,7 @@
     },
     data() {
       return {
-        loaded: false,
         isLoading: false,
-        chartDataRaw: {
-          labels: [],
-          datasets: []
-        },
       }
     },
 
@@ -170,9 +165,7 @@
       },
 
       async getAllHistoryData() {
-        this.loaded = false;
         this.isLoading = true;
-        this.chartDataRaw.datasets = [];
 
         const currenciesString = this.currencies.map(item => item.code).join(',');
         let startDate = 2001;
@@ -188,14 +181,14 @@
           );
         }
 
-        this.chartDataRaw.labels = labels;
-
         try {
           const rawResponse = await Promise.all(promises);
           const responses = await Promise.all(rawResponse.map(res => res.json()));
 
+          let tempDataSets = [];
+
           this.currencies.forEach(currency => {
-            this.chartDataRaw.datasets.push({
+            tempDataSets.push({
               type: "line",
               borderWidth: 2,
               label: currency.code,
@@ -205,7 +198,11 @@
             });
           });
 
-          this.loaded = true;
+          this.$store.commit('currency/setDymamicChartData', {
+            labels,
+            datasets: tempDataSets
+          });
+
           this.isLoading = false;
         } catch(e) {
           console.log('e', e);
@@ -215,7 +212,8 @@
     computed: {
       ...mapState('currency', {
         currencyCodes: 'currencyCodes',
-        currencies: 'currencies'
+        currencies: 'currencies',
+        chartDataRaw: 'chartDataRaw'
       }),
 
       currenciesDisplay() {
