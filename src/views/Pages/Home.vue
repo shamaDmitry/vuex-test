@@ -35,8 +35,8 @@
 								{{ today }}
 							</div>
 							<v-list-item-title class="headline mb-1">
-								1 {{ currencyCodeName }} = {{ todayPrice }} hrn <br>
-								100 {{ currencyCodeName }} = {{ todayPriceDisplay }} hrn
+								1 {{ currencyCodeName }} = {{ todayPrice }} hrn <br> 100 {{ currencyCodeName }} = {{ todayPriceDisplay
+								}} hrn
 
 								<template v-if="percentView !== 0">
 									<v-chip
@@ -98,6 +98,12 @@
     mounted() {
       this.onChangeCurrencyCode(this.currencyCodeName);
       this.getCurrencyList();
+
+      fetch('/api/')
+        .then(res => res.json())
+        .then(res => {
+          console.log('res', res)
+        })
     },
     computed: {
       ...mapState('currency', {
