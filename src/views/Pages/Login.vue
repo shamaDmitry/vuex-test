@@ -17,7 +17,7 @@
 					ref="observer"
 					v-slot="{ invalid }"
 				>
-					<form @submit.prevent="submit">
+					<form @submit.prevent="submitLogin">
 						<validation-provider
 							v-slot="{ errors }"
 							name="email"
@@ -39,25 +39,23 @@
 							<v-text-field
 								v-model="password"
 								:append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-								:rules="[rules.required, rules.min]"
 								:type="show1 ? 'text' : 'password'"
 								name="input-10-1"
 								label="Password"
-								hint="At least 8 characters"
-								counter
 								@click:append="show1 = !show1"
 							></v-text-field>
 						</validation-provider>
 
+						<v-btn @click="clearFields">
+							clear
+						</v-btn>
+
 						<v-btn
-							class="mr-4"
+							class="ml-4"
 							type="submit"
 							:disabled="invalid"
 						>
 							submit
-						</v-btn>
-						<v-btn @click="clear">
-							clear
 						</v-btn>
 					</form>
 				</validation-observer>
@@ -69,27 +67,13 @@
 <script>
   import { required, digits, email, max, regex } from 'vee-validate/dist/rules'
   import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+  import { mapMutations } from 'vuex'
 
-  setInteractionMode('eager')
-
-  extend('digits', {
-    ...digits,
-    message: '{_field_} needs to be {length} digits. ({_value_})',
-  });
+  setInteractionMode('eager');
 
   extend('required', {
     ...required,
     message: '{_field_} can not be empty',
-  });
-
-  extend('max', {
-    ...max,
-    message: '{_field_} may not be greater than {length} characters',
-  });
-
-  extend('regex', {
-    ...regex,
-    message: '{_field_} {_value_} does not match {regex}',
   });
 
   extend('email', {
@@ -104,23 +88,41 @@
     },
     data: () => ({
       show1: false,
-      password: 'Password',
-      email: '',
-      rules: {
-        required: value => !!value || 'Required.',
-        min: v => v.length >= 8 || 'Min 8 characters',
-        emailMatch: () => (`The email and password you entered don't match`),
-      },
     }),
 
-    methods: {
-      submit() {
-        this.$refs.observer.validate();
+    computed: {
+      email: {
+        get() {
+          return this.$store.state.auth.user.email
+        },
+        set(email) {
+          this.$store.commit('auth/setEmail', email)
+        }
       },
-      clear() {
-        this.password = '';
-        this.email = '';
-        this.$refs.observer.reset();
+      password: {
+        get() {
+          return this.$store.state.auth.user.password
+        },
+        set(password) {
+          this.$store.commit('auth/setPassword', password)
+        }
+      },
+    },
+
+    methods: {
+      ...mapMutations('auth', {
+        clearFields: 'clearFields'
+      }),
+
+      submitLogin() {
+        let data = {
+          email: this.email,
+          password: this.password
+        };
+
+        this.$store.dispatch('auth/login', data)
+          .then(() => this.$router.push('/'))
+          .catch(err => console.log(err))
       },
     },
   }

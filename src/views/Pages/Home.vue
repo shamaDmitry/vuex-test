@@ -92,6 +92,8 @@
 
 <script>
   import { mapState, mapGetters, mapActions } from 'vuex'
+  import axios from 'axios'
+
 
   export default {
     name: 'Home',
@@ -99,11 +101,14 @@
       this.onChangeCurrencyCode(this.currencyCodeName);
       this.getCurrencyList();
 
-      fetch('/api/')
-        .then(res => res.json())
-        .then(res => {
-          console.log('res', res)
-        })
+      // try {
+      //   axios.get('/api/login')
+      //     .then(res => {
+      //       console.log('res', res)
+      //     })
+      // } catch(e) {
+      //   console.log('eeeee', e);
+      // }
     },
     computed: {
       ...mapState('currency', {
