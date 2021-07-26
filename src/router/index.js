@@ -9,9 +9,6 @@ const routes = [
     path: '/',
     name: 'Home',
     component: () => import('../views/Pages/Home.vue'),
-    meta: {
-      requiresAuth: true
-    }
   },
   {
     path: '/history',
@@ -20,17 +17,11 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import('../views/Pages/History.vue'),
-    meta: {
-      requiresAuth: true
-    }
   },
   {
     path: '/dynamic-history',
     name: 'DynamicHistory',
     component: () => import('../views/Pages/DynamicHistory.vue'),
-    meta: {
-      requiresAuth: true
-    }
   },
   {
     path: '/login',
@@ -50,15 +41,19 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if(to.matched.some(record => record.meta.requiresAuth)) {
-    if(store.getters.isLoggedIn) {
-      next()
-      return
-    }
-    next('/login')
-  } else {
-    next()
+  const publicPages = ['/login', '/register'];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem('token');
+
+  if(authRequired && !loggedIn) {
+    return next('/login');
   }
-})
+
+  if(!authRequired && loggedIn) {
+    return next('/');
+  }
+
+  next();
+});
 
 export default router

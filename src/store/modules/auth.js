@@ -1,24 +1,25 @@
 import axios from 'axios'
+import router from '@/router'
 
 const state = {
   token: localStorage.getItem('token') || '',
   user: {
-    name: 'test',
-    email: 'test@test.com',
-    password: 'test'
+    name: '',
+    email: '',
+    password: ''
   },
-  status: ''
+  status: localStorage.getItem('token') ? 'success' : false
 }
 
 const mutations = {
-  authRequest(state) {
-    state.status = 'loading';
+  authRequest(state, payload) {
+    state.status = payload;
   },
 
-  authSuccess(state, token, user) {
+  authSuccess(state, payload) {
     state.status = 'success';
-    state.token = token;
-    state.user = user;
+    state.token = payload.token;
+    state.user = payload.user;
   },
 
   authError(state) {
@@ -28,6 +29,9 @@ const mutations = {
   logOut(state) {
     state.status = '';
     state.token = '';
+
+    localStorage.removeItem('token');
+    router.push('/login');
   },
 
   setName(state, name) {
@@ -64,13 +68,11 @@ const actions = {
         const user = resp.data.user;
         localStorage.setItem('token', token);
         axios.defaults.headers.common['Authorization'] = token;
-        commit('authSuccess', token, user);
+        commit('authSuccess', { token, user });
 
         commit('clearFields');
       }
     } catch(error) {
-      console.error(error);
-
       if(error.response) {
         const { message } = error.response.data;
 
@@ -81,14 +83,13 @@ const actions = {
     }
   },
 
-  async login({ commit }, user) {
+  async login({ commit }, data) {
     try {
-      commit('authRequest');
+      commit('authRequest', 'loading');
 
-      const resp = await axios({ url: '/api/login', data: user, method: 'POST' });
-      console.log(resp);
+      const resp = await axios({ url: '/api/login', data, method: 'POST' });
 
-      if(resp.status === 201) {
+      if(resp.status === 200) {
         this._vm.$toast.success(resp.data.message);
 
         const token = resp.data.token;
@@ -96,13 +97,11 @@ const actions = {
 
         localStorage.setItem('token', token);
         axios.defaults.headers.common['Authorization'] = token;
-        commit('authSuccess', token, user);
 
+        commit('authSuccess', { token, user });
         commit('clearFields');
       }
-    } catch(e) {
-      console.error(error);
-
+    } catch(error) {
       if(error.response) {
         const { message } = error.response.data;
 

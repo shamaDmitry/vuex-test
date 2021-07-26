@@ -149,7 +149,7 @@
 		methods: {
 			...mapMutations('auth', {
 			  logOut: 'logOut'
-			})
+			}),
 		}
   };
 </script>
