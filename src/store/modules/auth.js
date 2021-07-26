@@ -68,9 +68,8 @@ const actions = {
         const user = resp.data.user;
         localStorage.setItem('token', token);
         axios.defaults.headers.common['Authorization'] = token;
-        commit('authSuccess', { token, user });
 
-        commit('clearFields');
+        commit('authSuccess', { token, user });
       }
     } catch(error) {
       if(error.response) {
@@ -99,13 +98,14 @@ const actions = {
         axios.defaults.headers.common['Authorization'] = token;
 
         commit('authSuccess', { token, user });
-        commit('clearFields');
       }
     } catch(error) {
       if(error.response) {
         const { message } = error.response.data;
 
-        this._vm.$toast.error(message);
+        this._vm.$toast.error(message, {
+          timeout: 1500
+        });
       }
 
       localStorage.removeItem('token');
