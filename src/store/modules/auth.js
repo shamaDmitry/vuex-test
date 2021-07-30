@@ -66,8 +66,9 @@ const actions = {
 
         const token = resp.data.token;
         const user = resp.data.user;
+
         localStorage.setItem('token', token);
-        axios.defaults.headers.common['Authorization'] = token;
+        // axios.defaults.headers.common['Authorization'] = token;
 
         commit('authSuccess', { token, user });
       }
@@ -91,8 +92,7 @@ const actions = {
       if(resp.status === 200) {
         this._vm.$toast.success(resp.data.message);
 
-        const token = resp.data.token;
-        const user = resp.data.user;
+        const { token, user } = resp.data;
 
         localStorage.setItem('token', token);
         axios.defaults.headers.common['Authorization'] = token;

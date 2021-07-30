@@ -10,8 +10,6 @@
 			v-model="currencyCodeName"
 			v-on:change="onChangeCurrencyCode"
 			dense
-			hide-details
-			return-object
 			label="Currency"
 			menu-props="auto"
 			filled
@@ -100,15 +98,6 @@
     mounted() {
       this.onChangeCurrencyCode(this.currencyCodeName);
       this.getCurrencyList();
-
-      // try {
-      //   axios.get('/api/login')
-      //     .then(res => {
-      //       console.log('res', res)
-      //     })
-      // } catch(e) {
-      //   console.log('eeeee', e);
-      // }
     },
     computed: {
       ...mapState('currency', {
@@ -167,7 +156,7 @@
       }),
 
       onChangeCurrencyCode(code) {
-        this.$store.dispatch('currency/getPrice', code)
+        this.$store.dispatch('currency/getPrice', code);
       },
     },
   }

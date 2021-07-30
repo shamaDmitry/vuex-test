@@ -89,7 +89,13 @@ const actions = {
     fetch(url)
       .then(res => res.json())
       .then(res => {
-        let codes = res.filter(item => item.cc !== 'USD').map(item => item.cc).sort();
+        let codes = res.filter(item => item.cc !== 'USD').map(item => {
+          return {
+            text: item.txt,
+            value: item.cc,
+            disabled: false
+          }
+        });
 
         commit('setCurrencyCodeNames', codes);
       });

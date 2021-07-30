@@ -120,9 +120,12 @@
           password: this.password
         };
 
-        this.$store.dispatch('auth/login', data)
-          .then(() => this.$router.push('/'))
-          .catch(err => console.log(err))
+        try {
+          this.$store.dispatch('auth/login', data)
+            .then(() => this.$router.push('/'))
+        } catch(err) {
+          console.log(err)
+        }
       },
     },
   }
