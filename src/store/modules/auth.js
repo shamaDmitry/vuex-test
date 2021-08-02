@@ -31,6 +31,7 @@ const mutations = {
     state.token = '';
 
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     router.push('/login');
   },
 
@@ -68,6 +69,7 @@ const actions = {
         const user = resp.data.user;
 
         localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
         // axios.defaults.headers.common['Authorization'] = token;
 
         commit('authSuccess', { token, user });
@@ -80,6 +82,7 @@ const actions = {
       }
 
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
     }
   },
 
@@ -95,7 +98,8 @@ const actions = {
         const { token, user } = resp.data;
 
         localStorage.setItem('token', token);
-        axios.defaults.headers.common['Authorization'] = token;
+        localStorage.setItem('user', JSON.stringify(user));
+        // axios.defaults.headers.common['Authorization'] = token;
 
         commit('authSuccess', { token, user });
       }
@@ -109,6 +113,7 @@ const actions = {
       }
 
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
     }
   }
 }
