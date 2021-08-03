@@ -59,7 +59,7 @@
             depressed
             rounded
             text
-            @click="logOut"
+            @click="logout"
           >
             Disconnect
           </v-btn>
@@ -70,29 +70,18 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: "Menu",
-  created() {
-    try {
-      let user = JSON.parse(localStorage.getItem('user'));
-      user ? this.user = user : this.user = null;
-
-      this.user = user;
-    } catch(e) {
-      console.log(e)
-    }
+  computed: {
+    ...mapState('auth', {
+      user: 'user',
+    }),
   },
-  data() {
-    return {
-      user: null,
-    }
-  },
-  computed: {},
   methods: {
-    ...mapMutations('auth', {
-      logOut: 'logOut'
+    ...mapActions('auth', {
+      logout: 'logout'
     }),
 
     initials() {

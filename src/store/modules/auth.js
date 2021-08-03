@@ -1,13 +1,16 @@
 import axios from 'axios'
 import router from '@/router'
 
+const user = JSON.parse(localStorage.getItem('user'));
+const emptyUser = {
+  name: '',
+  email: '',
+  password: ''
+};
+
 const state = {
   token: localStorage.getItem('token') || '',
-  user: {
-    name: '',
-    email: '',
-    password: ''
-  },
+  user: user || emptyUser,
   status: localStorage.getItem('token') ? 'success' : false
 }
 
@@ -51,6 +54,11 @@ const mutations = {
     state.user.name = '';
     state.user.email = '';
     state.user.password = '';
+  },
+
+  setUser(state, userData) {
+    state.user = userData;
+    localStorage.setItem('user', JSON.stringify(userData));
   }
 }
 
@@ -70,7 +78,6 @@ const actions = {
 
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
-        // axios.defaults.headers.common['Authorization'] = token;
 
         commit('authSuccess', { token, user });
       }
@@ -99,7 +106,6 @@ const actions = {
 
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
-        // axios.defaults.headers.common['Authorization'] = token;
 
         commit('authSuccess', { token, user });
       }
@@ -115,6 +121,15 @@ const actions = {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
     }
+  },
+
+  logout({ commit }) {
+    commit('logOut');
+    commit('setUser', {
+      name: '',
+      email: '',
+      password: ''
+    });
   }
 }
 
