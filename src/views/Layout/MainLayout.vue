@@ -23,10 +23,14 @@
         app
         clipped-left
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
 
       <v-toolbar-title>
-        App
+        <v-btn
+          plain
+          to="/">
+          App
+        </v-btn>
       </v-toolbar-title>
 
       <v-spacer />

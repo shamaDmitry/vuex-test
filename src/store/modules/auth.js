@@ -39,15 +39,15 @@ const mutations = {
   },
 
   setName(state, name) {
-    state.user.name = name
+    state.user.name = name.trim()
   },
 
   setEmail(state, email) {
-    state.user.email = email
+    state.user.email = email.trim()
   },
 
   setPassword(state, password) {
-    state.user.password = password
+    state.user.password = password.trim()
   },
 
   clearFields(state) {

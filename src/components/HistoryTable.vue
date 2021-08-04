@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<v-select
+		<v-autocomplete
 			class="mb-6"
 			:items="currencyCodes"
 			v-model="currencyCodeName"
@@ -11,7 +11,7 @@
 			menu-props="auto"
 			filled
 			style="max-width: 250px;"
-		></v-select>
+		></v-autocomplete>
 
 		<v-simple-table>
 			<template v-slot:default>

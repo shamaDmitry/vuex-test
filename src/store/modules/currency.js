@@ -1,6 +1,8 @@
 import { API_URL } from '@/api/consts'
 import moment from 'moment'
 import formatDate from '@/utils/helpers'
+import _ from 'lodash'
+
 
 const state = {
   currencyCodes: [],
@@ -66,7 +68,7 @@ const mutations = {
 const actions = {
   getPrice({ commit, getters }, code) {
     let todayDate = formatDate(new Date().toISOString());
-    let currentUrl = `${API_URL}/exchange?valcode=${code}&date=${todayDate}&json`;
+    let currentUrl = `${ API_URL }/exchange?valcode=${ code }&date=${ todayDate }&json`;
 
     fetch(currentUrl)
       .then(res => res.json())
@@ -74,22 +76,24 @@ const actions = {
         commit('setTodayPrice', res);
       });
 
-    let prevUrl = `${API_URL}/exchange?valcode=${code}&date=${getters.prevDay}&json`;
+    let prevUrl = `${ API_URL }/exchange?valcode=${ code }&date=${ getters.prevDay }&json`;
 
     fetch(prevUrl)
       .then(res => res.json())
       .then(res => {
         commit('setPrevDayPrice', res);
       });
+
+    commit('setCurrencyCode', code);
   },
 
   getCurrencyList({ commit }) {
-    let url = `${API_URL}/exchange?json`;
+    let url = `${ API_URL }/exchange?json`;
 
     fetch(url)
       .then(res => res.json())
       .then(res => {
-        let codes = res.filter(item => item.cc !== 'USD').map(item => {
+        let codes = _.sortBy(res, ['txt']).map(item => {
           return {
             text: item.txt,
             value: item.cc,
@@ -110,7 +114,7 @@ const actions = {
       let date = formatDate(moment().subtract(i, 'days').format());
 
       promises.push(
-        fetch(`${API_URL}/exchange?valcode=${code}&date=${date}&json`)
+        fetch(`${ API_URL }/exchange?valcode=${ code }&date=${ date }&json`)
       );
     }
 
@@ -155,7 +159,7 @@ const getters = {
     let data = state.historyData.map(item => {
       return (
         label = item.txt,
-        item.rate
+          item.rate
       )
     });
 

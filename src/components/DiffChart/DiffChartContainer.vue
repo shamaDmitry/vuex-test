@@ -34,7 +34,7 @@
 							name="code"
 							rules="required"
 						>
-							<v-select
+							<v-autocomplete
 								v-model="input.code"
 								:items="currencyCodes"
 								label="Currency"
@@ -44,7 +44,7 @@
 								required
 								single-line
 								dense
-							></v-select>
+							></v-autocomplete>
 						</validation-provider>
 					</v-col>
 

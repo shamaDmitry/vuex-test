@@ -5,6 +5,10 @@
         Hello, {{ user.name }}!
       </h1>
 
+      <h2 class="mb-4">
+        Edit info:
+      </h2>
+
       <validation-observer
         class="d-block"
         ref="observer"
@@ -100,31 +104,22 @@ export default {
       try {
         const data = {
           _id: this.user._id,
-          name: this.user.name,
+          name: this.user.name.trim(),
           email: this.user.email
         };
 
         const resp = await axios({ url: '/api/update-user', data, method: 'POST' });
 
-
-
         if(resp.status === 200) {
-          console.log('resp.status', resp.status)
-          console.log('this._vm.$toast', this._vm.$toast)
-          // this._vm.$toast.success(resp.data.message);
-
-          console.log('this.$store', this.$store);
-          console.log('asdasdadsasddassadsad.$store');
+          this.$toast.success(resp.data.message);
 
           this.$store.commit('auth/setUser', resp.data.user);
-        } else {
-          console.log('tyt')
         }
       } catch(error) {
-        if(error.response) {
-          const { message } = error.response.data;
+        if(error.response.status === 404) {
+          const message = error.response.statusText;
 
-          this._vm.$toast.error(message, {
+          this.$toast.error(message, {
             timeout: 1500
           });
         }
