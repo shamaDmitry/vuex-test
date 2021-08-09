@@ -66,7 +66,7 @@
 import { email, required } from 'vee-validate/dist/rules'
 import { extend, setInteractionMode, ValidationObserver, ValidationProvider } from 'vee-validate'
 import axios from "axios";
-import { mapMutations } from "vuex";
+import { API } from '@/api/consts'
 
 setInteractionMode('eager')
 
@@ -108,7 +108,7 @@ export default {
           email: this.user.email
         };
 
-        const resp = await axios({ url: '/api/update-user', data, method: 'POST' });
+        const resp = await axios({ url: `${ API }/api/update-user`, data, method: 'POST' });
 
         if(resp.status === 200) {
           this.$toast.success(resp.data.message);

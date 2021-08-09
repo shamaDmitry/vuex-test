@@ -1,5 +1,6 @@
 import axios from 'axios'
 import router from '@/router'
+import { API } from '@/api/consts'
 
 const user = JSON.parse(localStorage.getItem('user'));
 const emptyUser = {
@@ -67,8 +68,7 @@ const actions = {
     try {
       commit('authRequest');
 
-      const resp = await axios({ url: '/api/register', data: user, method: 'POST' });
-      console.log(resp);
+      const resp = await axios({ url: `${API}/api/register`, data: user, method: 'POST' });
 
       if(resp.status === 201) {
         this._vm.$toast.success(resp.data.message);
@@ -97,7 +97,7 @@ const actions = {
     try {
       commit('authRequest', 'loading');
 
-      const resp = await axios({ url: '/api/login', data, method: 'POST' });
+      const resp = await axios({ url: `${API}/api/login`, data, method: 'POST' });
 
       if(resp.status === 200) {
         this._vm.$toast.success(resp.data.message);
@@ -108,6 +108,8 @@ const actions = {
         localStorage.setItem('user', JSON.stringify(user));
 
         commit('authSuccess', { token, user });
+      } else {
+        console.log(resp.status)
       }
     } catch(error) {
       if(error.response) {

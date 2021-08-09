@@ -10,7 +10,7 @@
 				align="center"
 			>
 				<h1 class="mb-4">
-					Login ddsasdasaddas
+					Login
 				</h1>
 
 				<validation-observer

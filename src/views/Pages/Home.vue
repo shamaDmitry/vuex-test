@@ -155,8 +155,6 @@ export default {
     }),
 
     onChangeCurrencyCode(code) {
-      console.log('onChangeCurrencyCode', code)
-
       this.$store.dispatch('currency/getPrice', code);
     },
   },
