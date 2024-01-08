@@ -1,9 +1,9 @@
 module.exports = {
   devServer: {
+    clientLogLevel: 'warn',
     proxy: {
       '/api': {
-        // target: 'http://192.168.114.153:3000'
-        target: 'https://pure-sea-27302.herokuapp.com/'
+        target: 'https://vuex-test-server.vercel.app/'
       }
     },
   },
