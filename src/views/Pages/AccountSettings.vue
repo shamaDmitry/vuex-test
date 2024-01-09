@@ -79,8 +79,6 @@ export default {
     try {
       let user = JSON.parse(localStorage.getItem('user'));
       user ? (this.user = user) : (this.user = null);
-
-      console.log('user', user);
     } catch (e) {
       console.log(e);
     }

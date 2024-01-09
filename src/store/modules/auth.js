@@ -5,8 +5,8 @@ import { API } from '@/api/consts';
 const user = JSON.parse(localStorage.getItem('user'));
 const emptyUser = {
   name: '',
-  email: 'test@test.com',
-  password: 'test',
+  email: '',
+  password: '',
 };
 
 const state = {
@@ -106,8 +106,6 @@ const actions = {
         data,
         method: 'POST',
       });
-
-      console.log(resp);
 
       if (resp.status === 200) {
         this._vm.$toast.success(resp.data.message);
