@@ -85,7 +85,7 @@ export default {
     }),
 
     initials() {
-      let temp = this.user.name.split(' ');
+      let temp = this.user.username.split(' ');
 
       if(temp.length === 1) return false;
 
